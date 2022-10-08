@@ -58,11 +58,9 @@ use tokio_test::{
 
         let (tx, mut rx) = mpsc::channel(2);
 
-        tokio::spawn(async move {
-            assert_ok!(foo.send(FooActorMessages::Msg1).await);
-            assert_ok!(foo.send(FooActorMessages::Msg2(FooActorMessagesMsg2{a: 1, c: tx.clone()})).await);
-            assert_ok!(foo.send(FooActorMessages::Msg3(FooMsg{a: 2, c: tx})).await);
-        });
+        assert_ok!(foo.send(FooActorMessages::Msg1).await);
+        assert_ok!(foo.send(FooActorMessages::Msg2(FooActorMessagesMsg2{a: 1, c: tx.clone()})).await);
+        assert_ok!(foo.send(FooActorMessages::Msg3(FooMsg{a: 2, c: tx})).await);
 
         assert_eq!(Some(1), rx.recv().await);
         assert_eq!(Some(2), rx.recv().await);
@@ -127,11 +125,9 @@ use tokio_test::{
 
         let bar = BarActor{}.start(suptx, &expected);
         
-        tokio::spawn(async move {
-            assert_ok!(bar.send(BarActorMessages::A).await);
-            assert_ok!(bar.send(BarActorMessages::B(BarActorMessagesB{x: true})).await);
-            assert_ok!(bar.send(BarActorMessages::B(BarActorMessagesB{x: false})).await);
-        });
+        assert_ok!(bar.send(BarActorMessages::A).await);
+        assert_ok!(bar.send(BarActorMessages::B(BarActorMessagesB{x: true})).await);
+        assert_ok!(bar.send(BarActorMessages::B(BarActorMessagesB{x: false})).await);
 
 
         if let Some(SupActorMessages::M(ret)) = suprx.recv().await {
